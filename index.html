@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Three.js</title>
+    <link rel = "stylesheet" href="css/main.css">
+</head>
+<body>
+                <!--imports three.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
+                <!--allows us to animate our project-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+
+    <script>
+        /* Creates a scene*/
+        var scene = new THREE.Scene();
+        /*Create a camera. In this case we will create a perspective camera
+           This takes as input (Field of view, aspect ratio, near plane, far plane )*/
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight,0.1,1000);
+        /*Create renderer, eg WebGL, css3D, svg renderer etc*/
+        var rendeer = new THREE.WebGLRenderer({antialias: true});
+        /*Sets a kind of background*/
+        renderer.setClearColour("#e5e5e5");
+        renderer.setSize(window.innerWidth,window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+    </script>
+
+</body>
+</html>
