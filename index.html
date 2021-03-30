@@ -31,9 +31,7 @@
             //renderer.setClearColor("#e5e5e5");
             /*Expands render area to the sie of the window*/
             renderer.setSize( window.innerWidth , window.innerHeight );
-
             document.body.appendChild( renderer.domElement );
-
             //Make so it resizes if window resizes
             window.addEventListener( 'resize', function( ){
                 var width = window.innerWidth;
@@ -42,21 +40,26 @@
                 camera.aspect = width / height;
                 camera.updateProjectionMatrix( );
             })
-
             //Adds Controls
             var controls = new THREE.OrbitControls( camera, renderer.domElement );
             //Create shape (box/cylinder)
             var geometry = new THREE.BoxGeometry( 1, 1, 1, );
-
+            var cubeMaterials = 
+            [
+                new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader( ).load ('./img/img3.jpg'), side: THREE.DoubleSide } ),
+                new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader( ).load ('./img/img3.jpg'), side: THREE.DoubleSide } ),
+                new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader( ).load ('./img/img3.jpg'), side: THREE.DoubleSide } ),
+                new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader( ).load ('./img/img3.jpg'), side: THREE.DoubleSide } ),
+                new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader( ).load ('./img/img3.jpg'), side: THREE.DoubleSide } ),
+                new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader( ).load ('./img/img3.jpg'), side: THREE.DoubleSide } )
+            ];
             // Create a material colour or image texture
-            var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, wireframe: true });
+            //var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, wireframe: true });
+            var material = new THREE.MeshFaceMaterial( cubeMaterials );
             var cube = new THREE.Mesh( geometry, material );
             scene.add( cube );
-
             // Set camera position
             camera.position.z = 3;
-    
-
             //game logic (eg rotation, moving etc)
             var update = function( )
             {
@@ -67,8 +70,7 @@
             var render = function( )
             { 
                 renderer.render( scene, camera );
-            };
-
+            }; 
             //run game loop (update, render, repeat)
             var GameLoop = function ( ) 
             {
@@ -76,7 +78,6 @@
                 update();
                 render();
             };
-
             GameLoop();
         </script>
     </div>
