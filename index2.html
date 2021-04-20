@@ -16,7 +16,7 @@
         <script src="./js/three.js"></script>
         <script src="./js/OrbitControls.js"></script>
         <script src="./js/FirstPersonControls.js"></script>
-        <script src="./js/FlyControls.js"></script>
+        <script src="./js/DragControls.js"></script>
         <script type = "module" src=./js/GLTFLoader.js></script>
                 <!--allows us to animate our project-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
@@ -169,6 +169,65 @@
             GameLoop();
         </script>
     </div>
+    <div class = "drag">
+        <script>
+            var scene = new THREE.Scene();
+            scene.background = new THREE.Color( 0xf0f0f0 )
+            var camera = new THREE.PerspectiveCamera( 75 , window.innerWidth / window.innerHeight, 0.1, 10000 );
+
+            var renderer = new THREE.WebGLRenderer({ antialias: true });
+            var width = window.innerWidth * 1.0;
+            var height = window.innerHeight * 1.0;
+            renderer.setSize( width, height);
+            document.body.appendChild( renderer.domElement);
+
+            camera.position.z    = 5;
+
+            var objects = [];
+
+            function init(){
+                var ambientLight = new THREE.ambientLight( 0x0f0f0f );
+                scene.add( ambientLight);
+
+                var light = new THREE.SpotLight ( 0xffffff, 1.5);
+                light.position.set( 0, 500, 2000);
+
+                scene.add(light);
+
+                //loop to create n objects
+                for (var i = 0; i <10; ++i) {
+                    //random colour
+                    var object = new THREE.Mesh (geometry, new THREE.MeshLambertMaterial ( { color: Math.random() * 0xffffff } ) );
+                    //randomised position
+                    object.position.x = Math.random() * 1000 - 500;
+                    //object.position.y = Math.random() * 1000 - 500;
+                   // object.position.z = Math.random() * 1000 - 500;
+
+                   object.castShadow = true;
+                   object.reieveShadow = true;
+
+                   scene.add (object);
+                   object.push (object);
+
+                }
+
+                var controls = new THREE.DragControls( objects, camera, rendere.domElement);
+
+            }
+
+            function animate () {
+                requestAnimationFrame( animate );
+
+                renderer.render( scene, camera);
+            }
+
+            init();
+            animate();
+            
+            
+
+        </script>
+    </div>  
 </body>
 <footer>
     

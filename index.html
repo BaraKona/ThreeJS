@@ -17,11 +17,13 @@
         <script src="./js/OrbitControls.js"></script>
         <script src="./js/FirstPersonControls.js"></script>
         <script src="./js/ObjectLoader.js"></script>
+        <script src="./js/DragControls.js"></script>
+        <script src="./js/MTLLoader.js"></script>
         <!--<script src="./js/FlyControls.js"></script>-->
         <script type = "module" src=./js/GLTFLoader.js></script>
                 <!--allows us to animate our project-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
-            <script type= "module">
+            <script type= "module" >
                 import { GLTFLoader } from "./js/GLTFLoader.js";
                 /* Creates a scene*/
                 var scene = new THREE.Scene();
@@ -34,13 +36,12 @@
                 //renderer.setClearColor("#e5e5e5");   
 
                 //initialise object loader for obj 3d files
-                //const objLoader = new OBJLoader();
-                //objLoader.load('Natural_Birch.obj', (root) => {
-                //    scene.add(root);
-                //})
+                
+                
+                
                 //Sets the size of the window (width, height)
-                var width = window.innerWidth * 1.0;
-                var height = window.innerHeight * .70;
+                const width = window.innerWidth * 1.0;
+                const height = window.innerHeight * .70;
                 renderer.setSize( width, height);
                 
                 document.body.appendChild( renderer.domElement );
@@ -58,9 +59,10 @@
     
                 //Create GLTF loader object
                 var loader = new GLTFLoader();
+                
                 //Create object for rotation
                 var obj;
-                //var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, wireframe: true });
+                var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, wireframe: true });
                // const material = new THREE.MeshBasicMaterial();
                // material.metalness = 0.7;
                // material.roughness = 0.7;
@@ -151,8 +153,114 @@
                 };
                 GameLoop();
             </script>
+
+
+
+            <!--SCRIPT 2-->
+            <script type= "module">
+                import { GLTFLoader } from "./js/GLTFLoader.js";
+                var scene = new THREE.Scene();
+                scene.background = new THREE.Color( 0xf0f0f0 )
+                var camera = new THREE.PerspectiveCamera( 75 , window.innerWidth / window.innerHeight, 0.1, 10000 );
+
+                var renderer = new THREE.WebGLRenderer({ antialias: true });
+                var width = window.innerWidth * 1.0;
+                var height = window.innerHeight * 1.0;
+                renderer.setSize( width, height);
+                document.body.appendChild( renderer.domElement);
+
+                camera.position.x = -10;
+                camera.position.y = -10;
+                camera.position.z   = 10;
+                
+                var loader = new GLTFLoader();
+                
+                
+                //Create object for rotation
+                var obj;
+                var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, wireframe: true });
+               // const material = new THREE.MeshBasicMaterial();
+               // material.metalness = 0.7;
+               // material.roughness = 0.7;
+                //Loads model.
+                loader.load( "Lemon_Sorbet.gltf", function(gltf){
+                    obj = gltf.scene;
+                    //If you want to change the material of the gltf. In this case did not work
+                    obj.material = new THREE.MeshStandardMaterial();
+                    //sets scale of object (x,y,z)
+                    obj.scale.set( .002, .002, .002 );
+                    
+                    scene.add(gltf.scene);
+                });
+                //obj.position.x = Math.random() * 10 - 15;
+                //obj.position.y = Math.random() * 10 - 15;
+                
+
+                var objects = [];
+
+                var startColour;
+
+                function init(){
+                    var ambientLight = new THREE.AmbientLight(0x0F0F0F);
+                    scene.add( ambientLight);
+
+                    var light = new THREE.SpotLight ( 0xffffff, 1.);
+                    light.position.set( 0, 500, 2000);
+
+                    scene.add(light);
+
+                    var geometry = new THREE.BoxGeometry(2,2,2);
+
+                    //loop to create n objects
+                    for (var i = 0; i <3; ++i) {
+                        //random colour
+                        var object = new THREE.Mesh (geometry, new THREE.MeshStandardMaterial ( /*{ color: Math.random() * 0xffffff }*/ {color: 0xFFE185} ) );
+                        //randomised position
+                        object.position.x = Math.random() * 10 - 15;
+                        object.position.y = Math.random() * 10 - 15;
+                        //object.position.z = Math.random() * 10 - 20;
+                        
+
+                       object.castShadow = true;
+                       object.reieveShadow = true;
+
+                       scene.add (object);
+                       objects.push (object);
+
+                    }
+
+                    var controls = new THREE.DragControls( objects, camera, renderer.domElement);
+                    controls.addEventListener ('dragstart', dragStartCallback);
+                    controls.addEventListener ('dragend', dragEndCallback);
+                }   
+                //function for the start colour and drag
+                function dragStartCallback(event) {
+                    //gets the startcolour of material
+                    startColour = event.object.material.color.getHex();
+                    //changes colour if grabbed to ncolour
+                    event.object.material.color.setHex(	0xa9a9a9);
+                    event.object.position.y = 0; 
+                    event.object.position.z = 0; 
+                }
+                //function to restore colour
+                function dragEndCallback(event){
+                    event.object.material.color.setHex(startColour);
+                }
+
+                function animate () {
+                    requestAnimationFrame( animate );
+
+                    renderer.render( scene, camera);
+                }
+
+                init();
+                animate();
+
+            </script>
+   </script>
         </section>
         <section class = "do">
+            
         <div class = "container">
             <div class = "text">
                 <h1>
@@ -165,29 +273,20 @@
                     quis auctor elit sed. Cursus in hac habitasse platea dictumst. Ut lectus arcu bibendum at. Vitae auctor eu augue ut lectus arcu bibendum. Sit amet 
                     consectetur adipiscing elit duis tristique sollicitudin. Ullamcorper a lacus vestibulum sed arcu non odio euismod.
                 </p>   
+                
             </div>   
             <canvas class = "webgl">
 
             </canvas>
-        </div>  
-    </section>    
-    <section class = "next">
-        <div> 
-            <h1>
-                Trial 3
-            </h1>
-        </div>
-    </section>
-    <section class = "next1">
-        <div> 
-            <h1>
-                
-            </h1>
-        </div>
-    </section>
+        </div> 
 </body>
+
 <footer>
-   
+    <section>
+        <div class = "drag">
+            
+        </div>  
+    </section>  
 </footer>
 
 </html>
