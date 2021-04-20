@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\..\\Desktop\\textures"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "ThreeJS",
+		"liveServer.settings.port": 5501
+	}
+}
